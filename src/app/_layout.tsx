@@ -5,6 +5,9 @@ import * as SplashScreen from "expo-splash-screen";
 
 
 import {useFonts, OpenSans_700Bold, OpenSans_400Regular, OpenSans_600SemiBold} from "@expo-google-fonts/open-sans";
+import { View } from "react-native";
+
+import { colors } from "@/styles/colors";
 
 SplashScreen.preventAutoHideAsync();
 const Layout = () => {
@@ -21,10 +24,10 @@ const Layout = () => {
 		return;
 	}
 	return(
-		<>
-			<StatusBar style="dark" />
+		<View style={{flex: 1, backgroundColor: colors.gray[600]}}>
+			<StatusBar style="auto" />
 			<Slot />
-		</>
+		</View>
 	);
 };
 
