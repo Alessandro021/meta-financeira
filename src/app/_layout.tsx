@@ -3,12 +3,12 @@ import { Slot } from "expo-router";
 
 
 const Layout = () => {
-    return(
-       <>
-        <StatusBar style="dark" />
-       <Slot />
-       </>
-    )
-}
+	return(
+		<>
+			<StatusBar style="dark" />
+			<Slot />
+		</>
+	);
+};
 
 export default Layout;
