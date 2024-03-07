@@ -16,7 +16,7 @@ interface Props extends TouchableOpacityProps {
 export const Goal = ({goal, ...rest}: Props) => {
 	const porcent = (goal.current / goal.total) * 100;
 	return(
-		<TouchableOpacity {...rest} style={style.container} >
+		<TouchableOpacity {...rest} style={style.container} activeOpacity={0.7} >
 			<Text style={style.header}>{goal.name}</Text>
 			<View>
 				<Text style={style.title}>R$ {goal.current}</Text>
