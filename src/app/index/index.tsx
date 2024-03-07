@@ -10,6 +10,7 @@ import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Bottom from "@gorhom/bottom-sheet";
 import { Input } from "@/components/Input.tsx";
+import { Button } from "@/components/Button";
 
 const TRASATIONS = [
 	{
@@ -76,32 +77,39 @@ const goal = [
 		name: "Computador",
 		current: 1010,
 		total: 4200,
+		transactions: TRASATIONS
 	},
 	{
 		id: "2",
 		name: "Celular",
 		current: 350,
 		total: 2000,
+		transactions: TRASATIONS
 	},
 	{
 		id: "3",
 		name: "Cerveja",
 		current: 56,
 		total: 120,
+		transactions: TRASATIONS
 	},
 	{
 		id: "4",
 		name: "Xbox",
 		current: 1800,
 		total: 2500,
+		transactions: TRASATIONS
 	},
 	{
 		id: "5",
 		name: "Mesa",
 		current: 100,
 		total: 100,
+		transactions: TRASATIONS
 	}
 ];
+
+
 
 const Index = () => {
 
@@ -128,6 +136,7 @@ const Index = () => {
 					onChangeText={setTotal}
 					value={total}
 				/>
+				<Button title="Criar" onPress={() => {}} />
 			</BottomSheet>
 		</SafeAreaView>
 	);
