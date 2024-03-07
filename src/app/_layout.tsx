@@ -1,4 +1,3 @@
-import "../styles/global.css";
 import { StatusBar } from "expo-status-bar";
 import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
