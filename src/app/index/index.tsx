@@ -22,27 +22,33 @@ const goal = [
 	{
 		id: "1",
 		name: "Computador",
-		current: 2500,
-		total: 3000,
+		current: 1010,
+		total: 4200,
 	},
 	{
 		id: "2",
-		name: "Computador",
-		current: 2500,
-		total: 3000,
+		name: "Celular",
+		current: 350,
+		total: 2000,
 	},
 	{
 		id: "3",
-		name: "Computador",
-		current: 2500,
-		total: 3000,
+		name: "Cerveja",
+		current: 56,
+		total: 120,
 	},
 	{
 		id: "4",
-		name: "Computador",
-		current: 2500,
-		total: 3000,
+		name: "Xbox",
+		current: 1800,
+		total: 2500,
 	},
+	{
+		id: "5",
+		name: "Mesa",
+		current: 100,
+		total: 100,
+	}
 ];
 
 const Index = () => {

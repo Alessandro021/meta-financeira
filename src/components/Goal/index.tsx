@@ -14,12 +14,18 @@ interface Props extends TouchableOpacityProps {
 }
 
 export const Goal = ({goal, ...rest}: Props) => {
+	const porcent = (goal.current / goal.total) * 100;
 	return(
 		<TouchableOpacity {...rest} style={style.container} >
 			<Text style={style.header}>{goal.name}</Text>
 			<View>
 				<Text style={style.title}>R$ {goal.current}</Text>
 				<Text style={style.subTitle}>de R$ {goal.total}</Text>
+			</View>
+
+			<View style={{width: "100%", height: 20, backgroundColor: colors.gray[300], borderRadius: 8, flexDirection: "row", zIndex: 2, position: "relative"}}>
+				<View  style={{width: `${porcent}%`, height: "100%", backgroundColor: colors.green[500], borderRadius: 8}} />
+				<Text style={{zIndex: 10, color: colors.white, position: "absolute", right: 10}}>{porcent.toFixed(0)}%</Text>
 			</View>
 		</TouchableOpacity>
 	);
@@ -41,7 +47,6 @@ const style = StyleSheet
 			fontFamily: fontFamily.bold,
 			fontSize: 18,
 			lineHeight: 28,
-			marginBottom: 12
 		},
 		title: {
 			color: colors.white,
