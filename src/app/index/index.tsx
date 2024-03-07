@@ -1,10 +1,15 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import "@/libs/dayjs";
+import { BottomSheet } from "@/components/BottonSheet";
 import { Goals } from "@/components/Goals";
 import { Header } from "@/components/Header";
 import { Transations } from "@/components/Transactions";
+import { useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Bottom from "@gorhom/bottom-sheet";
+import { Input } from "@/components/Input.tsx";
 
 const TRASATIONS = [
 	{
@@ -99,13 +104,31 @@ const goal = [
 ];
 
 const Index = () => {
+
+	const bottomSheetRef = useRef<Bottom>(null);
+	const handleBottomSheetOpen = () => bottomSheetRef.current?.expand();
+	const handleBottomSheetClose = () => bottomSheetRef.current?.snapToIndex(0);
+
+	const [name, setName] = useState("");
+	const [total, setTotal] = useState("");
+
 	return(
 		<SafeAreaView style={style.container}>
 			<View style={style.header}>
 				<Header title="Suas metas" subTitle="Poupe hoje para colher os frutos amanhã."/>
 			</View>
-			<Goals goals={goal} onAdd={() => {}} onPress={() => {}} />
+			<Goals goals={goal} onAdd={handleBottomSheetOpen} onPress={() => {}} />
 			<Transations transactions={TRASATIONS}/>
+			<BottomSheet ref={bottomSheetRef} onClose={handleBottomSheetClose} title="Nova meta"  snapPoints={[0.01, 284]}>
+				<Input placeholder="Nome da meta" onChangeText={setName} value={name} />
+
+				<Input
+					placeholder="Valor"
+					keyboardType="numeric"
+					onChangeText={setTotal}
+					value={total}
+				/>
+			</BottomSheet>
 		</SafeAreaView>
 	);
 };
