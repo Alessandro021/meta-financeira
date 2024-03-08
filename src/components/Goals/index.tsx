@@ -16,9 +16,10 @@ type Props = TouchableOpacityProps & {
     goals: GoalsProps[]
     onPress: (id: string) => void
     onAdd: () => void
+	onLongPress: (id: number, name: string) => void
 }
 
-export const Goals = ({goals, onPress, onAdd, ...rest }: Props) => {
+export const Goals = ({goals, onPress, onLongPress, onAdd, ...rest }: Props) => {
 
 	return(
 		<View style={style.container}>
@@ -36,7 +37,7 @@ export const Goals = ({goals, onPress, onAdd, ...rest }: Props) => {
 				}
 				data={goals}
 				keyExtractor={item => item.id}
-				renderItem={({ item}) => <Goal goal={item} onPress={() => onPress(item.id)}/>}
+				renderItem={({ item}) => <Goal goal={item} onLongPress={() => onLongPress(Number(item.id), item.name)}  onPress={() => onPress(item.id)}/>}
 				horizontal={true}
 				showsVerticalScrollIndicator={false}
 			/>

@@ -11,14 +11,15 @@ export interface TransactionProps {
   }
 
   interface Props {
-    transactions: TransactionProps[]
+    transactions: TransactionProps[],
+	title?: string
   }
 
-export const Transations = ({transactions}: Props) => {
+export const Transations = ({transactions, title="Transações"}: Props) => {
 	return(
 		<View style={styles.container}>
 			<View style={{borderBottomWidth: 1, borderColor: colors.gray[300]}}>
-				<Text style={styles.title}>Transações</Text>
+				<Text style={styles.title}>{title}</Text>
 			</View>
 
 			<FlatList
@@ -29,6 +30,11 @@ export const Transations = ({transactions}: Props) => {
 				ListEmptyComponent={
 					<View >
 						<Text style={styles.empty}>Ops, nenhuma transação disponivel ainda.</Text>
+					</View>
+				}
+				ListFooterComponent={
+					<View style={styles.viewFooter}>
+						<Text style={styles.footer}>{transactions.length >= 10 && `Essas são a(s) ${transactions.length} ultimas transações!`}</Text>
 					</View>
 				}
 			/>
@@ -52,5 +58,14 @@ const styles = StyleSheet.create({
 		color: colors.white,
 		fontSize: 14,
 		fontFamily: fontFamily.regular,
+	},
+	viewFooter: {
+		paddingVertical: 10,
+	},
+	footer: {
+		color: colors.white,
+		fontSize: 16,
+		fontFamily: fontFamily.regular,
+		textAlign: "center"
 	}
 });

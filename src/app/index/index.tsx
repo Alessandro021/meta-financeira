@@ -29,11 +29,22 @@ const Index = () => {
 	const [total, setTotal] = useState("");
 	const [transactions, setTransactions] = useState<TransactionProps[]>([]);
 	const [goals, setGoals] = useState<GoalsProps[]>([]);
-	const {all, create} = useGoalRepository();
+	const {all, create, deleteGoal} = useGoalRepository();
 	const {findLatest} = useTransactionRepository();
 
 	const handleDetails = (id: string) => {
 		router.navigate("/details/" + id);
+	};
+
+	const handleDeleteGoals =  async (id: number, name: string) => {
+		try {
+			Alert.alert("Excluir", `Deseja excluir a meta ${name}`, [
+				{text: "cancelar", style: "cancel"},
+				{text: "excluir", onPress: () => {  deleteGoal(Number(id)); fetchGoals(); fetchTransactions();}}
+			]);
+		  } catch (error) {
+			console.log(error);
+		  }
 	};
 
 	const handleCreate = async () => {
@@ -43,6 +54,10 @@ const Index = () => {
 		  if (isNaN(totalAsNumber)) {
 				return Alert.alert("Erro", "Valor inválido.");
 		  }
+
+		  if (Number(total) <= 0) {
+				return Alert.alert("Erro", "Valor não pode ser igual a zero ou negativo.");
+	  	  }
 	
 		  create({ name, total: totalAsNumber });
 	
@@ -95,8 +110,8 @@ const Index = () => {
 			<View style={style.header}>
 				<Header title="Suas metas" subTitle="Poupe hoje para colher os frutos amanhã."/>
 			</View>
-			<Goals goals={goals} onAdd={handleBottomSheetOpen} onPress={handleDetails} />
-			<Transations transactions={transactions}/>
+			<Goals goals={goals} onAdd={handleBottomSheetOpen} onPress={handleDetails} onLongPress={handleDeleteGoals} />
+			<Transations title="Ultimas transações" transactions={transactions}/>
 			<BottomSheet ref={bottomSheetRef} onClose={handleBottomSheetClose} title="Nova meta"  snapPoints={[0.01, 284]}>
 				<Input placeholder="Nome da meta" onChangeText={setName} value={name} />
 

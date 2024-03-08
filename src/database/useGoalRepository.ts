@@ -67,9 +67,28 @@ export const useGoalRepository = () => {
 		}
 	};
 
+	const deleteGoal = (id: number) => {
+		try {
+			// Primeiro, exclui as transações associadas ao objetivo
+			const deleteTransactionsStatement = database.prepareSync(`
+                DELETE FROM transactions WHERE goal_id = $id
+            `);
+			deleteTransactionsStatement.executeSync({$id: id});
+    
+			// Em seguida, exclui o objetivo
+			const deleteGoalStatement = database.prepareSync(`
+                DELETE FROM goals WHERE id = $id
+            `);
+			deleteGoalStatement.executeSync({$id: id});
+		} catch (error) {
+			throw error;
+		}
+	};
+
 	return{
 		create,
 		all,
-		show
+		show,
+		deleteGoal
 	};
 };
