@@ -3,6 +3,7 @@ import { colors } from "@/styles/colors";
 import { fontFamily } from "@/styles/fontFamily";
 import { Pressable, PressableProps, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from "react-native";
 import { Porcent } from "../Porcent";
+import { currencyFormat } from "@/utils/currencyFormat";
 
 export type GoalProps = {
     name: string
@@ -20,8 +21,8 @@ export const Goal = ({goal, ...rest}: Props) => {
 		<TouchableOpacity {...rest} style={style.container} activeOpacity={0.7} >
 			<Text style={style.header}>{goal.name}</Text>
 			<View>
-				<Text style={style.title}>R$ {goal.current}</Text>
-				<Text style={style.subTitle}>de R$ {goal.total}</Text>
+				<Text style={style.title}>{currencyFormat(goal.current)}</Text>
+				<Text style={style.subTitle}>de {currencyFormat(goal.total)}</Text>
 			</View>
 			<Porcent porcent={porcent} />
 		</TouchableOpacity>

@@ -106,7 +106,7 @@ const Details = () => {
 		<SafeAreaView style={styles.container}>
 			<View style={styles.header}>
 				<BackButton />
-				<Header title={goal?.name ?? ""} subTitle={`R$ ${goal?.current} de R$ ${goal?.total}`} />
+				<Header title={goal?.name ?? ""} subTitle={`${goal?.current} de ${goal?.total}`} />
 				<Porcent porcent={porcent}/>
 			</View>
 
