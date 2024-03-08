@@ -10,7 +10,7 @@ interface HeaderProps {
 export const Header = ({title, subTitle}: HeaderProps) => {
 	return(
 		<View>
-			<Text style={style.title} >{title}</Text>
+			<Text style={style.title}>{title}</Text>
 			<Text style={style.subTitle}>{subTitle}</Text>
 		</View>
 	);

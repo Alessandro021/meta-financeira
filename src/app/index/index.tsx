@@ -2,15 +2,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import "@/libs/dayjs";
 import { BottomSheet } from "@/components/BottonSheet";
-import { Goals } from "@/components/Goals";
+import { Goals, GoalsProps } from "@/components/Goals";
 import { Header } from "@/components/Header";
-import { Transations } from "@/components/Transactions";
-import { useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { TransactionProps, Transations } from "@/components/Transactions";
+import { useEffect, useRef, useState } from "react";
+import { Alert, Keyboard, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Bottom from "@gorhom/bottom-sheet";
 import { Input } from "@/components/Input.tsx";
 import { Button } from "@/components/Button";
+import { router } from "expo-router";
+import dayjs from "dayjs";
 
 const TRASATIONS = [
 	{
@@ -71,7 +73,7 @@ const TRASATIONS = [
 	  },
 ];
   
-const goal = [
+export const goal = [
 	{
 		id: "1",
 		name: "Computador",
@@ -119,14 +121,72 @@ const Index = () => {
 
 	const [name, setName] = useState("");
 	const [total, setTotal] = useState("");
+	const [transactions, setTransactions] = useState<TransactionProps[]>([]);
+	const [goals, setGoals] = useState<GoalsProps[]>([]);
+
+	const handleDetails = (id: string) => {
+		router.navigate("/details/" + id);
+	};
+
+	const handleCreate = async () => {
+		try {
+		  const totalAsNumber = Number(total.toString().replace(",", "."));
+	
+		  if (isNaN(totalAsNumber)) {
+				return Alert.alert("Erro", "Valor inválido.");
+		  }
+	
+		  console.log({ name, total: totalAsNumber });
+	
+		  Keyboard.dismiss();
+		  handleBottomSheetClose();
+		  Alert.alert("Sucesso", "Meta cadastrada!");
+	
+		  setName("");
+		  setTotal("");
+		} catch (error) {
+		  Alert.alert("Erro", "Não foi possível cadastrar.");
+		  console.log(error);
+		}
+	  };
+
+	  const fetchGoals = async () => {
+		try {
+		  const response = goal;
+		  setGoals(response);
+		} catch (error) {
+		  console.log(error);
+		}
+	  };
+
+	  const fetchTransactions = async () => {
+		try {
+		  const response = TRASATIONS;
+	
+		  setTransactions(
+				response.map((item) => ({
+			  ...item,
+			  date: dayjs(item.date).format("DD/MM/YYYY [às] HH:mm"),
+				}))
+		  );
+		} catch (error) {
+		  console.log(error);
+		}
+	  };
+
+	  useEffect(() => {
+		fetchGoals();
+		fetchTransactions();
+	  }, []);
+	
 
 	return(
 		<SafeAreaView style={style.container}>
 			<View style={style.header}>
 				<Header title="Suas metas" subTitle="Poupe hoje para colher os frutos amanhã."/>
 			</View>
-			<Goals goals={goal} onAdd={handleBottomSheetOpen} onPress={() => {}} />
-			<Transations transactions={TRASATIONS}/>
+			<Goals goals={goals} onAdd={handleBottomSheetOpen} onPress={handleDetails} />
+			<Transations transactions={transactions}/>
 			<BottomSheet ref={bottomSheetRef} onClose={handleBottomSheetClose} title="Nova meta"  snapPoints={[0.01, 284]}>
 				<Input placeholder="Nome da meta" onChangeText={setName} value={name} />
 
@@ -136,7 +196,7 @@ const Index = () => {
 					onChangeText={setTotal}
 					value={total}
 				/>
-				<Button title="Criar" onPress={() => {}} />
+				<Button title="Criar" onPress={handleCreate} />
 			</BottomSheet>
 		</SafeAreaView>
 	);

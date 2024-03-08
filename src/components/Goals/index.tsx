@@ -36,7 +36,7 @@ export const Goals = ({goals, onPress, onAdd, ...rest }: Props) => {
 				}
 				data={goals}
 				keyExtractor={item => item.id}
-				renderItem={({ item}) => <Goal goal={item}/>}
+				renderItem={({ item}) => <Goal goal={item} onPress={() => onPress(item.id)}/>}
 				horizontal={true}
 				showsVerticalScrollIndicator={false}
 			/>
