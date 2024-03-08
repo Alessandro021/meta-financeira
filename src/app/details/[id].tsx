@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { BackButton } from "@/components/BackButton";
 import { router, useLocalSearchParams } from "expo-router";
-import { Alert, Keyboard, StyleSheet, Text, View } from "react-native";
+import { Alert, Keyboard, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { goal as meta } from "../index";
 import { Header } from "@/components/Header";
 import { TransactionProps, Transations } from "@/components/Transactions";
 import { Porcent } from "@/components/Porcent";
@@ -16,6 +15,11 @@ import { TransactionTypeSelect } from "@/components/TransactionTypeSelect";
 import dayjs from "dayjs";
 import { currencyFormat } from "@/utils/currencyFormat";
 import { Loading } from "@/components/Loading";
+
+//SQLite
+import { useGoalRepository } from "@/database/useGoalRepository";
+import { useTransactionRepository } from "@/database/useTransactionRepository";
+
 interface Details {
     // id: string
     name: string
@@ -27,8 +31,11 @@ interface Details {
 const Details = () => {
 
 	const {id: goalId} = useLocalSearchParams();
+
 	
-	
+	const {show} = useGoalRepository();
+	const {create, findByGoal} = useTransactionRepository();	
+
 	const [amount, setAmount] = useState("");
 	const [isLoading, setIsLoading] = useState(true);
 	const [type, setType] = useState<"up" | "down">("up");
@@ -42,8 +49,8 @@ const Details = () => {
 	const fetchDetails = async () => {
 		try {
 			if (goalId) {
-				const goal = meta.find(item => item.id === goalId);
-				const transactions = goal?.transactions;
+				const goal = show(Number(goalId));
+				const transactions = findByGoal(Number(goalId));
 				setPorcent(((goal?.current ?? 0) / (goal?.total ?? 1)) * 100);
 
 				if (!goal || !transactions) {
@@ -80,7 +87,7 @@ const Details = () => {
 				amountAsNumber = amountAsNumber * -1;
 			}
 
-			console.log({ goalId, amount: amountAsNumber });
+			create({ goalId: Number(goalId), amount: amountAsNumber });
 
 			Alert.alert("Sucesso", "Transação registrada!");
 
@@ -89,6 +96,8 @@ const Details = () => {
 
 			setAmount("");
 			setType("up");
+
+			fetchDetails();
 		} catch (error) {
 			console.log(error);
 		}

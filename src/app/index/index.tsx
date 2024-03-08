@@ -14,103 +14,9 @@ import { Button } from "@/components/Button";
 import { router } from "expo-router";
 import dayjs from "dayjs";
 
-const TRASATIONS = [
-	{
-	  id: "1",
-	  date: "16-03-2024",
-	  amount: 100,
-	},
-	{
-	  id: "2",
-		date:  "16-03-2024",
-	  	amount: -90,
-	},
-	{
-		id: "",
-		  date:  "16-03-2024",
-		amount: -90,
-	},
-	{
-		id: "4",
-		date:  "16-03-2024",
-		amount: -90,
-	},
-	{
-		id: "5",
-		  date:  "16-03-2024",
-		amount: -90,
-	},
-
-	{
-		id: "6",
-		date:  "16-03-2024",
-		amount: -90,
-	},
-	{
-		id: "7",
-		  date:  "16-03-2024",
-		amount: -90,
-	},
-	{
-		id: "8",
-		date:  "16-03-2024",
-		amount: -90,
-	},
-	{
-		id: "9",
-		date:  "16-03-2024",
-		amount: -90,
-	},
-	{
-		id: "10",
-		  date:  "16-03-2024",
-		amount: -90,
-	  },
-	  {
-		id: "11",
-		  date:  "16-03-2024",
-		amount: -90,
-	  },
-];
-  
-export const goal = [
-	{
-		id: "1",
-		name: "Computador",
-		current: 1010,
-		total: 4200,
-		transactions: TRASATIONS
-	},
-	{
-		id: "2",
-		name: "Celular",
-		current: 350,
-		total: 2000,
-		transactions: TRASATIONS
-	},
-	{
-		id: "3",
-		name: "Cerveja",
-		current: 56,
-		total: 120,
-		transactions: TRASATIONS
-	},
-	{
-		id: "4",
-		name: "Xbox",
-		current: 1800,
-		total: 2500,
-		transactions: TRASATIONS
-	},
-	{
-		id: "5",
-		name: "Mesa",
-		current: 100,
-		total: 100,
-		transactions: TRASATIONS
-	}
-];
-
+//SQLite
+import { useGoalRepository } from "@/database/useGoalRepository";
+import { useTransactionRepository } from "@/database/useTransactionRepository";
 
 
 const Index = () => {
@@ -123,6 +29,8 @@ const Index = () => {
 	const [total, setTotal] = useState("");
 	const [transactions, setTransactions] = useState<TransactionProps[]>([]);
 	const [goals, setGoals] = useState<GoalsProps[]>([]);
+	const {all, create} = useGoalRepository();
+	const {findLatest} = useTransactionRepository();
 
 	const handleDetails = (id: string) => {
 		router.navigate("/details/" + id);
@@ -136,7 +44,7 @@ const Index = () => {
 				return Alert.alert("Erro", "Valor inválido.");
 		  }
 	
-		  console.log({ name, total: totalAsNumber });
+		  create({ name, total: totalAsNumber });
 	
 		  Keyboard.dismiss();
 		  handleBottomSheetClose();
@@ -144,6 +52,8 @@ const Index = () => {
 	
 		  setName("");
 		  setTotal("");
+
+		  fetchGoals();
 		} catch (error) {
 		  Alert.alert("Erro", "Não foi possível cadastrar.");
 		  console.log(error);
@@ -152,7 +62,7 @@ const Index = () => {
 
 	  const fetchGoals = async () => {
 		try {
-		  const response = goal;
+		  const response = all();
 		  setGoals(response);
 		} catch (error) {
 		  console.log(error);
@@ -161,7 +71,7 @@ const Index = () => {
 
 	  const fetchTransactions = async () => {
 		try {
-		  const response = TRASATIONS;
+		  const response = findLatest();
 	
 		  setTransactions(
 				response.map((item) => ({
